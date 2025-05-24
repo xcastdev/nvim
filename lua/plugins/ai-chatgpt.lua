@@ -1,6 +1,7 @@
 return {
 	"jackMort/ChatGPT.nvim",
 	event = "VeryLazy",
+		enabled=false,
 	config = function()
 		require("chatgpt").setup({
 			-- this config assumes you have OPENAI_API_KEY environment variable set

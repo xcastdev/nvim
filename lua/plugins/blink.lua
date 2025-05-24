@@ -1,59 +1,63 @@
 return {
-	"saghen/blink.cmp",
+  'saghen/blink.cmp',
 
-	dependencies = { "L3MON4D3/LuaSnip", version = "v2.*" },
+  dependencies = { 'L3MON4D3/LuaSnip', version = 'v2.*' },
 
-	version = "1.*",
+  version = '1.*',
 
-	---@module 'blink.cmp'
-	---@type blink.cmp.Config
+  opts = {
+    keymap = { preset = 'enter' },
 
-	opts = {
-		keymap = { preset = "enter" },
+    appearance = {
+      nerd_font_variant = 'mono',
+    },
 
-		appearance = {
-			nerd_font_variant = "mono",
-		},
+    completion = {
+      -- nvim-cmp style menu
+      menu = {
+        draw = {
+          columns = {
+            { 'label', 'label_description', gap = 1 },
+            { 'kind_icon', 'kind' },
+          },
+        },
+      },
+      -- Only show the documentation popup when manually triggered
+      { auto_show = true, auto_show_delay_ms = 500 },
+    },
 
-		completion = {
-			-- nvim-cmp style menu
-			menu = {
-				draw = {
-					columns = {
-						{ "label", "label_description", gap = 1 },
-						{ "kind_icon", "kind" },
-					},
-				},
-			},
-			-- Only show the documentation popup when manually triggered
-			{ auto_show = true, auto_show_delay_ms = 500 },
-		},
+    snippets = {
+      preset = 'luasnip',
+      expand = function(snippet)
+        require('luasnip').lsp_expand(snippet)
+      end,
+      active = function(filter)
+        if filter and filter.direction then
+          return require('luasnip').jumpable(filter.direction)
+        end
+        return require('luasnip').in_snippet()
+      end,
+      jump = function(direction)
+        require('luasnip').jump(direction)
+      end,
+    },
 
-		snippets = {
-			preset = "luasnip",
-			expand = function(snippet)
-				require("luasnip").lsp_expand(snippet)
-			end,
-			active = function(filter)
-				if filter and filter.direction then
-					return require("luasnip").jumpable(filter.direction)
-				end
-				return require("luasnip").in_snippet()
-			end,
-			jump = function(direction)
-				require("luasnip").jump(direction)
-			end,
-		},
+    -- Default list of enabled providers defined so that you can extend it
+    -- elsewhere in your config, without redefining it, due to `opts_extend`
+    sources = {
+      default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
+      providers = {
+        lazydev = {
+          name = 'LazyDev',
+          module = 'lazydev.integrations.blink',
+          score_offset = 100,
+        },
+      },
+    },
 
-		-- Default list of enabled providers defined so that you can extend it
-		-- elsewhere in your config, without redefining it, due to `opts_extend`
-		sources = {
-			default = { "lsp", "path", "snippets", "buffer" },
-		},
-
-		fuzzy = { implementation = "prefer_rust_with_warning" },
-	},
-	opts_extend = { "sources.default" },
+    fuzzy = { implementation = 'prefer_rust_with_warning' },
+  },
+  opts_extend = { 'sources.default' },
 }
 
 -- https://github.com/rafamadriz/friendly-snippets/tree/main/snippets
